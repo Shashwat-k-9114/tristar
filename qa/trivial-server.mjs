@@ -1,0 +1,2 @@
+import http from "node:http";
+http.createServer((q, r) => { r.setHeader("content-type", "text/html"); r.end(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>t</title><meta name="description" content="d"></head><body style="background:#000;color:#fff"><main><h1 style="font:700 64px/1 Georgia,serif">BIRYANI</h1><p>trivial baseline page</p></main></body></html>`); }).listen(3200);
