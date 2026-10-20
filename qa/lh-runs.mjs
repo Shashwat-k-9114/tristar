@@ -12,7 +12,8 @@ for (const form of ["mobile", "desktop"]) {
   for (let i = 1; i <= (form === "mobile" ? n : Math.min(n, 3)); i++) {
     const out = `qa/lh-${tag}-${form}-${i}.json`;
     const preset = form === "desktop" ? "--preset=desktop" : "";
-    execSync(`npx --yes lighthouse ${url} ${preset} --only-categories=performance,accessibility,best-practices,seo --chrome-flags="--headless=new --no-sandbox" --output=json --output-path=${out} --quiet`, { stdio: "ignore" });
+    const extra = process.env.LH_HEADERS_FILE ? `--extra-headers=${process.env.LH_HEADERS_FILE}` : "";
+    execSync(`npx --yes lighthouse ${url} ${preset} ${extra} --only-categories=performance,accessibility,best-practices,seo --chrome-flags="--headless=new --no-sandbox" --output=json --output-path=${out} --quiet`, { stdio: "ignore" });
     const r = JSON.parse(fs.readFileSync(out, "utf8"));
     const a = r.audits, c = r.categories;
     rows.push({ perf: Math.round(c.performance.score * 100), a11y: Math.round(c.accessibility.score * 100), bp: Math.round(c["best-practices"].score * 100), seo: Math.round(c.seo.score * 100), lcp: a["largest-contentful-paint"].numericValue, fcp: a["first-contentful-paint"].numericValue, tbt: a["total-blocking-time"].numericValue, cls: a["cumulative-layout-shift"].numericValue, bytes: a["total-byte-weight"].numericValue, lcpEl: a["largest-contentful-paint-element"]?.details?.items?.[0]?.items?.[0]?.node?.snippet?.slice(0, 60) });

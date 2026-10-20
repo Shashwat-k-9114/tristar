@@ -1,3 +1,5 @@
+> **SUPERSEDED (2026-10-20):** this document describes the neon/cinematic direction, which the client has discarded. The current direction is documented in `docs/09-odia-heritage-direction.md`. Kept for the record only.
+
 # 03 · Creative direction, parent identity and three segment identities
 
 > **Status: concepts for owner review. None of these logos, names, palettes or typefaces are approved.**

@@ -1,0 +1,3 @@
+base                   LCP median 1484 ms [1436–3168] | FCP 1484 | 238 KB | layout NaN style NaN script NaN ms
+no-below-fold          LCP median 1008 ms [976–1040] | FCP 1008 | 187 KB | layout NaN style NaN script NaN ms
+no-badges-anywhere     LCP median 1328 ms [1288–1400] | FCP 1328 | 238 KB | layout NaN style NaN script NaN ms

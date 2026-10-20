@@ -44,3 +44,6 @@ next-env.d.ts
 /qa/shots/
 /qa/*.json
 /qa/server.log
+
+.vercel
+.env*

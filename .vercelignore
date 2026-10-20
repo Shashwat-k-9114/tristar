@@ -1,0 +1,9 @@
+node_modules
+.next
+qa
+docs
+scripts
+latest-run
+*.tsbuildinfo
+.vercel
+.env*

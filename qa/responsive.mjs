@@ -1,7 +1,7 @@
 import { chromium } from "@playwright/test";
 const base = process.env.BASE || "http://localhost:3100";
 const widths = [[320, 640], [360, 780], [390, 844], [768, 1024], [1024, 768], [1440, 900], [1920, 1080]];
-const secs = ["hero", "#biryani", "#samosa", "#thali", "#the-experience", "footer"];
+const secs = ["hero", "#biryani", "#samosa", "#thali", "#the-food", "footer"];
 const shotW = new Set([390, 768, 1440]);
 const b = await chromium.launch();
 for (const [w, h] of widths) {

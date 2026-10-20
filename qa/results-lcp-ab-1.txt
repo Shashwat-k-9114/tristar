@@ -1,0 +1,11 @@
+base                   LCP median 1592 ms [1580–1592] | FCP median 1592 ms | 238 KB
+no-webfonts            LCP median 1664 ms [1600–1708] | FCP median 1664 ms | 228 KB
+no-hero-badge          LCP median 1472 ms [1432–1512] | FCP median 1472 ms | 238 KB
+no-hero-glow-wheel     LCP median 1544 ms [1504–1812] | FCP median 1544 ms | 238 KB
+no-paper-grain         LCP median 1592 ms [1500–1612] | FCP median 1592 ms | 236 KB
+flat-backgrounds       LCP median 1568 ms [1532–1660] | FCP median 1568 ms | 238 KB
+no-hero-index          LCP median 1436 ms [1424–1468] | FCP median 1436 ms | 238 KB
+no-below-fold          LCP median 1116 ms [1040–1192] | FCP median 1116 ms | 187 KB
+all-decor-off          LCP median 1428 ms [1372–1496] | FCP median 1428 ms | 236 KB
+no-javascript          LCP median 1596 ms [1540–1652] | FCP median 1596 ms | 90 KB
+no-js-no-below-fold    LCP median 1168 ms [1092–1292] | FCP median 1168 ms | 49 KB

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { site } from "@/content/site";
+import { isProduction, site } from "@/content/site";
 
 type PageSeo = {
   title: string;
@@ -10,7 +10,7 @@ type PageSeo = {
   type?: "website" | "article";
 };
 
-export function buildMetadata({ title, description, path, indexable = true, type = "website" }: PageSeo): Metadata {
+export function buildMetadata({ title, description, path, indexable = isProduction, type = "website" }: PageSeo): Metadata {
   const url = `${site.url}${path}`;
   return {
     title,

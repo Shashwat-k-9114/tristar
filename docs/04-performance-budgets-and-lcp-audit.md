@@ -1,3 +1,5 @@
+> **SUPERSEDED (2026-10-20):** this document describes the neon/cinematic direction, which the client has discarded. The current direction is documented in `docs/09-odia-heritage-direction.md`. Kept for the record only.
+
 # 04 · Performance budgets and mobile LCP audit
 
 ## A. Budgets (enforced before any heavy media is integrated)

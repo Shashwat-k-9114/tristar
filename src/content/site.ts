@@ -9,7 +9,7 @@ export const site = {
   url: "https://tristar1947.com",
   tagline: "Biryani. Samosa. Thali.",
   description:
-    "TRISTAR is opening soon on Kali Mandir Road, Jharsuguda, Odisha: three food worlds under one roof — chicken biryani, mutton and vegetable samosa, and thali.",
+    "TRISTAR is opening soon on Kali Mandir Road, Jharsuguda, Odisha: chicken biryani, mutton and vegetable samosa, and thali — three food identities under one Odisha-inspired roof.",
   locale: "en-IN",
   status: "opening-soon" as "opening-soon" | "open",
   business: {
@@ -28,6 +28,9 @@ export const site = {
     social: {} as Record<string, string>,
   },
 };
+
+/** True only on a Vercel PRODUCTION deployment. Previews and local builds are noindex and may show review-only draft content. */
+export const isProduction = process.env.VERCEL_ENV === "production";
 
 export const addressLine = () =>
   [site.business.streetAddress, site.business.city, site.business.region, site.business.country].filter(Boolean).join(", ");

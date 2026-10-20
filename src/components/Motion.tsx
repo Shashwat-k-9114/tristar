@@ -3,27 +3,39 @@
 import { useEffect } from "react";
 
 /**
- * Scroll choreography — each food world gets its own transition language.
+ * Scroll choreography — subtle, slow and purposeful.
  *
- * Performance contract: GSAP + ScrollTrigger are not downloaded until the visitor first
- * interacts (scroll / touch / key / pointer), so they never compete with first paint, LCP or
- * hydration. Skipped entirely under prefers-reduced-motion. All content is present and
- * readable in the HTML; every effect animates only transform / clip-path / opacity and is
- * scrubbed to scroll (no scroll hijacking, no pinning).
+ * Performance contract: GSAP + ScrollTrigger are not downloaded until the visitor first interacts
+ * (scroll / touch / key / pointer), so they never compete with first paint, LCP or hydration.
+ * Skipped entirely under prefers-reduced-motion. All content is present in the HTML; every effect
+ * animates only transform / opacity, plays once, and nothing is pinned or hijacked.
  *
- *   biryani  slow rising curtain (heat haze): panel lifts from below, copy drifts up
- *   samosa   hard diagonal wipe in 5 snapped steps, letters knock in with rotation
- *   thali    iris opens from the plate's centre, bowls settle in a staggered orbit
- *   kinetic  the Heat / Crunch / Abundance lines slide against each other
+ *   data-rise   blocks of copy fade up with a gentle stagger
+ *   data-badge  an emblem settles into place: a slight turn and scale, like a seal being pressed
  */
 export function Motion() {
   useEffect(() => {
-    // Ambient CSS loops (steam, ring) stay paused through first paint; release them once the page is idle.
-    const goLive = () => document.documentElement.classList.add("live");
+    // Ambient CSS loops (steam, glow) stay paused, and below-the-fold sections keep their deferred layout (content-visibility),
+    // until the page has loaded AND the first contentful paint has really happened — so none of that work can sit in front of first paint.
+    const goLive = () => document.documentElement.classList.add("live", "full");
     const idle = (window as unknown as { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => void }).requestIdleCallback;
     const release = () => (idle ? idle(goLive, { timeout: 1500 }) : setTimeout(goLive, 400));
-    if (document.readyState === "complete") release();
-    else window.addEventListener("load", release, { once: true });
+    const afterFirstPaint = (cb: () => void) => {
+      if (performance.getEntriesByName("first-contentful-paint").length) return cb();
+      try {
+        const po = new PerformanceObserver((list) => {
+          if (list.getEntriesByName("first-contentful-paint").length) {
+            po.disconnect();
+            cb();
+          }
+        });
+        po.observe({ type: "paint", buffered: true });
+      } catch {
+        cb();
+      }
+    };
+    const whenLoaded = (cb: () => void) => (document.readyState === "complete" ? cb() : window.addEventListener("load", cb, { once: true }));
+    whenLoaded(() => afterFirstPaint(release));
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
@@ -36,50 +48,18 @@ export function Motion() {
         .then(([{ gsap }, { ScrollTrigger }]) => {
           if (cancelled) return;
           gsap.registerPlugin(ScrollTrigger);
-          const q = <T extends HTMLElement>(sel: string, root: ParentNode = document) => Array.from(root.querySelectorAll<T>(sel));
+          const q = <T extends HTMLElement>(sel: string) => Array.from(document.querySelectorAll<T>(sel));
+          const once = (trigger: Element, start = "top 82%") => ({ trigger, start, once: true });
 
           const ctx = gsap.context(() => {
-            const scrub = (trigger: Element, start = "top 92%", end = "top 25%") => ({ trigger, start, end, scrub: 0.6 });
-
-            // BIRYANI — a slow rising curtain, then the copy drifts up
-            q("[data-world=biryani]").forEach((el) => {
-              const bg = el.querySelector("[data-layer]");
-              gsap.fromTo(el, { clipPath: "inset(14% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", ease: "power2.out", scrollTrigger: scrub(el) });
-              if (bg) gsap.fromTo(bg, { yPercent: 18 }, { yPercent: 0, ease: "none", scrollTrigger: scrub(el, "top bottom", "top top") });
-              gsap.from(q(".copy > *", el), { y: 40, autoAlpha: 0, stagger: 0.08, duration: 1.1, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 60%", once: true } });
-              gsap.from(q(".art", el), { y: 80, scale: 0.92, duration: 1.6, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 60%", once: true } });
+            q("[data-rise]").forEach((el) => {
+              const kids = Array.from(el.children);
+              gsap.from(kids.length ? kids : el, { y: 26, autoAlpha: 0, duration: 1.5, ease: "power2.out", stagger: 0.14, scrollTrigger: once(el) });
             });
 
-            // SAMOSA — angular wipe on a stepped ease, letters knock in
-            q("[data-world=samosa]").forEach((el) => {
-              gsap.fromTo(
-                el,
-                { clipPath: "polygon(0 0, 0% 0, -25% 100%, 0 100%)" },
-                { clipPath: "polygon(0 0, 125% 0, 100% 100%, 0 100%)", ease: "steps(5)", scrollTrigger: scrub(el, "top 95%", "top 20%") },
-              );
-              gsap.from(q("[data-kinetic] span[aria-hidden]", el), {
-                yPercent: 90,
-                rotate: (i: number) => (i % 2 ? 9 : -9),
-                autoAlpha: 0,
-                stagger: 0.06,
-                duration: 0.55,
-                ease: "back.out(2)",
-                scrollTrigger: { trigger: el, start: "top 55%", once: true },
-              });
-              gsap.from(q(".copy > :not([data-kinetic])", el), { x: 50, autoAlpha: 0, stagger: 0.07, duration: 0.5, ease: "power4.out", scrollTrigger: { trigger: el, start: "top 55%", once: true } });
-              gsap.from(q(".art", el), { x: -90, rotate: -6, duration: 0.6, ease: "power4.out", scrollTrigger: { trigger: el, start: "top 60%", once: true } });
-            });
-
-            // THALI — iris from the centre, bowls orbit into place
-            q("[data-world=thali]").forEach((el) => {
-              gsap.fromTo(el, { clipPath: "circle(0% at 66% 52%)" }, { clipPath: "circle(120% at 66% 52%)", ease: "power1.inOut", scrollTrigger: scrub(el, "top 95%", "top 10%") });
-              gsap.from(q(".art", el), { scale: 0.7, rotate: -40, duration: 2, ease: "expo.out", scrollTrigger: { trigger: el, start: "top 55%", once: true } });
-              gsap.from(q(".copy > *", el), { y: 24, autoAlpha: 0, stagger: 0.1, duration: 1.2, ease: "power2.out", scrollTrigger: { trigger: el, start: "top 55%", once: true } });
-            });
-
-            // KINETIC — the three words slide against each other as the section scrolls past
-            q("[data-slide]").forEach((el, i) => {
-              gsap.fromTo(el, { x: (i - 1) * 4 + "vw" }, { x: (1 - i) * 4 + "vw", ease: "none", scrollTrigger: { trigger: el.parentElement, start: "top bottom", end: "bottom top", scrub: 0.5 } });
+            q("[data-badge]").forEach((el) => {
+              const svg = el.querySelector("svg") ?? el;
+              gsap.from(svg, { scale: 0.93, rotate: -6, autoAlpha: 0, duration: 2.2, ease: "power3.out", transformOrigin: "50% 50%", scrollTrigger: once(el, "top 80%") });
             });
           });
           revert = () => ctx.revert();

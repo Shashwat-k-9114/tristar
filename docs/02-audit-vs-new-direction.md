@@ -1,3 +1,5 @@
+> **SUPERSEDED (2026-10-20):** this document describes the neon/cinematic direction, which the client has discarded. The current direction is documented in `docs/09-odia-heritage-direction.md`. Kept for the record only.
+
 # 02 · Audit — existing implementation vs. the new TRISTAR direction
 
 Scope: the previous milestone ("1947 – The Odia Diner", see `01-direction-inventory-and-open-items.md`). The old direction is archived, untouched, in `docs/legacy-odia-direction/`; the old screenshots are in `qa/shots-legacy/`. Nothing was committed or deployed.

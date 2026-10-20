@@ -6,7 +6,7 @@ const out = {};
 
 const hiddenCount = (p) =>
   p.evaluate(() =>
-    [...document.querySelectorAll(".copy > *, .art, .food-row, .photo-frame, .facts div, h1, h2")].filter((e) => {
+    [...document.querySelectorAll(".copy > *, .art, .dish, .facts div, h1, h2")].filter((e) => {
       const s = getComputedStyle(e);
       return s.opacity === "0" || s.visibility === "hidden" || s.display === "none";
     }).length,
