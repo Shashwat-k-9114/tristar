@@ -70,20 +70,24 @@ h1,h2,h3{font-weight:600;letter-spacing:-.035em;line-height:1.05}
 
 /* hero */
 .hero{padding:calc(var(--nav) + 80px) 0 0;text-align:center}
-.hero-stage{position:relative;height:600px;height:clamp(520px,44vw,640px);overflow:hidden;border-radius:32px;background:#061108 url("WhatsApp Image 2026-10-24 at 13.03.45.jpeg") center center/cover no-repeat;isolation:isolate;box-shadow:0 28px 70px rgba(0,0,0,.34)}
+.hero-stage{position:relative;height:auto;min-height:clamp(520px,44vw,640px);padding-bottom:64px;overflow:hidden;border-radius:32px;background:radial-gradient(ellipse at 50% 0%,#2a1408,#120904 60%,#080503);isolation:isolate;box-shadow:0 28px 70px rgba(0,0,0,.34)}
+.hero-wheel{position:absolute;z-index:1;pointer-events:none;color:#d9822b;opacity:.32;animation:wheelspin 90s linear infinite}
+.hero-wheel.l{width:clamp(300px,38vw,520px);left:-8%;bottom:-24%}
+.hero-wheel.r{width:clamp(240px,30vw,420px);right:-6%;top:-18%;animation-direction:reverse}
+@keyframes wheelspin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.hero-wheel{animation:none}}
+@media (max-width:833px){.hero-wheel.l{width:300px;left:-90px;bottom:-110px}.hero-wheel.r{width:240px;right:-80px;top:-70px}}
+.hero-dancer{position:absolute;z-index:2;pointer-events:none;filter:drop-shadow(0 10px 22px rgba(0,0,0,.45))}
+.hero-dancer.dl{left:1.5%;bottom:3%;height:min(86%,560px);width:auto}
+.hero-dancer.dr{right:2.5%;bottom:10%;height:min(54%,350px);width:auto}
+.hero-wheel{opacity:.18!important}
+@media (max-width:1100px){.hero-dancer.dl{left:-1%;height:62%}.hero-dancer.dr{right:0;height:40%}}
+@media (max-width:833px){.hero-stage{padding-bottom:250px!important}.hero-dancer.dl{left:6%;bottom:14px;height:225px}.hero-dancer.dr{right:8%;bottom:14px;height:165px}}
 .hero-stage::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,.08),transparent 28%,rgba(0,0,0,.18))}
 .hero-copy{position:relative;z-index:3;display:flex;height:100%;max-width:790px;margin:0 auto;padding:clamp(58px,7vw,96px) 24px 0;flex-direction:column;align-items:center;text-align:center}
 .hero-copy h1{font-size:78px;font-size:clamp(52px,7.2vw,92px);letter-spacing:-.045em;line-height:1.02;margin:12px 0 20px;text-wrap:balance}
 .hero-copy .sub{font-size:24px;font-size:clamp(20px,2.25vw,28px);line-height:1.17;font-weight:600;letter-spacing:-.025em;color:var(--ink);max-width:670px;margin:0 auto 26px;text-shadow:0 2px 18px rgba(0,0,0,.55)}
 .hero-copy .cta{justify-content:center}
-.hero-art-cover{position:absolute;pointer-events:none}
-.hero-art-cover.center{left:27%;right:27%;top:19%;bottom:18%;z-index:1;border-radius:34px;background:#061108;box-shadow:0 0 70px rgba(0,0,0,.28),inset 0 0 70px rgba(87,190,70,.04)}
-.hero-art-cover.right{top:0;right:0;bottom:0;width:31%;z-index:1;background:linear-gradient(90deg,rgba(6,17,8,.14),rgba(6,17,8,.9) 17%,rgba(6,17,8,.98))}
-.hero-art-cover.mobile-sides{display:none}
-.hero-dancer{position:absolute;z-index:2;pointer-events:none;background-image:url("WhatsApp Image 2026-10-24 at 13.03.45.jpeg");background-repeat:no-repeat;background-size:auto 100%;filter:drop-shadow(0 22px 24px rgba(0,0,0,.28));-webkit-mask-image:radial-gradient(ellipse at center,#000 54%,rgba(0,0,0,.96) 72%,transparent 100%);mask-image:radial-gradient(ellipse at center,#000 54%,rgba(0,0,0,.96) 72%,transparent 100%)}
-.hero-dancer-right{top:17%;right:1.5%;width:250px;width:clamp(205px,20vw,278px);height:410px;height:clamp(330px,35vw,452px);background-position:right center}
-.hero-art-mark{position:absolute;left:50%;bottom:14px;z-index:2;width:120px;height:82px;transform:translateX(-50%);background:url("WhatsApp Image 2026-10-24 at 13.03.45.jpeg") center bottom/500% auto no-repeat;filter:drop-shadow(0 8px 12px rgba(0,0,0,.35));-webkit-mask-image:radial-gradient(ellipse at center,#000 56%,transparent 100%);mask-image:radial-gradient(ellipse at center,#000 56%,transparent 100%)}
-.hero-dancers-mobile{display:none}
 .trio{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:64px}
 .tr{position:relative;border-radius:var(--r);overflow:hidden;aspect-ratio:4/5;background:#111;display:block}
 .tr>img,.tr .soon{position:absolute;inset:0;width:100%;height:100%}
@@ -342,19 +346,15 @@ th{font-size:11px;color:var(--mute);font-weight:600}
   .f-cols{grid-template-columns:1fr 1fr}
 }
 @media (min-width:834px) and (max-width:1280px){
-  .hero-stage{height:560px;height:clamp(520px,44vw,600px)}
+  .hero-stage{height:auto;min-height:540px}
   .hero-copy{max-width:760px;padding-top:64px}
   .hero-copy h1{font-size:68px;font-size:clamp(54px,6.4vw,76px)}
   .hero-copy .sub{font-size:22px;font-size:clamp(20px,2.1vw,25px)}
-  .hero-art-cover.center{left:20%;right:20%}
-  .hero-dancer-right{width:220px;width:clamp(190px,19vw,245px);height:360px;height:clamp(320px,34vw,420px)}
 }
 @media (min-width:834px) and (max-width:1100px){
   .hero-copy{max-width:700px;padding-top:58px}
   .hero-copy h1{font-size:56px;font-size:clamp(50px,5.6vw,62px)}
   .hero-copy .sub{font-size:20px;font-size:clamp(19px,2vw,22px)}
-  .hero-art-cover.center{left:18%;right:18%}
-  .hero-dancer-right{width:190px;height:320px}
 }
 @media (max-width:833px){
   section{padding:80px 0}
@@ -366,18 +366,10 @@ th{font-size:11px;color:var(--mute);font-weight:600}
   .burger{display:grid}
   .gnav .right .pill{display:none}
   .hero{padding-top:calc(var(--nav) + 56px)}
-  .hero-stage{height:auto;min-height:0;padding:54px 16px 16px;border-radius:24px;background-size:auto 100%;background-position:center bottom}
+  .hero-stage{height:auto;min-height:0;padding:54px 16px 16px;border-radius:24px}
   .hero-copy{height:auto;padding:0 6px;max-width:600px}
   .hero-copy h1{font-size:46px;font-size:clamp(42px,9vw,72px);margin:12px 0 18px}
   .hero-copy .sub{font-size:20px;font-size:clamp(19px,3.1vw,24px);max-width:500px;margin-bottom:24px}
-  .hero-art-cover.center{left:6%;right:6%;top:18%;bottom:12%;border-radius:24px}
-  .hero-art-cover.right,.hero-dancer-right{display:none}
-  .hero-art-cover.mobile-sides{display:block;left:0;right:0;bottom:0;height:42%;z-index:1;background:linear-gradient(90deg,#061108 0 24%,rgba(6,17,8,.72) 31%,transparent 39% 61%,rgba(6,17,8,.72) 69%,#061108 76% 100%)}
-  .hero-art-mark{bottom:10px;width:104px;height:72px}
-  .hero-dancers-mobile{display:flex;position:relative;z-index:2;justify-content:space-between;align-items:flex-end;gap:12px;height:164px;margin:16px 0 0}
-  .hero-dancer-mobile{position:relative;flex:none;width:124px;height:168px;background-size:auto 100%;}
-  .hero-dancer-mobile-left{background-position:left center}
-  .hero-dancer-mobile-right{width:112px;height:158px;background-position:right center}
   .hero-tile{aspect-ratio:4/4.4;margin-top:44px;border-radius:22px}
   .trio{grid-template-columns:1fr;margin-top:44px}.tr{aspect-ratio:4/3.4;border-radius:22px}
   .statement{padding:90px 0 60px}
@@ -394,9 +386,6 @@ th{font-size:11px;color:var(--mute);font-weight:600}
   .f-cols{grid-template-columns:1fr 1fr}
   .legend .lnk{margin-left:0}
   .hero .cta{flex-direction:column;gap:18px}
-  .hero-dancers-mobile{height:142px;margin-top:14px}
-  .hero-dancer-mobile{width:106px;height:146px}
-  .hero-dancer-mobile-right{width:96px;height:136px}
 }
 </style>
 </head>
@@ -432,20 +421,15 @@ th{font-size:11px;color:var(--mute);font-weight:600}
 <section class="hero">
   <div class="wide">
     <div class="hero-stage">
-      <div class="hero-art-cover center" aria-hidden="true"></div>
-      <div class="hero-art-cover right" aria-hidden="true"></div>
-      <div class="hero-art-cover mobile-sides" aria-hidden="true"></div>
-      <div class="hero-dancer hero-dancer-right" aria-hidden="true"></div>
-      <div class="hero-art-mark" aria-hidden="true"></div>
+      <svg class="hero-wheel l" viewBox="-150 -150 300 300" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.2"><circle r="92"/><circle r="20"/><circle r="8" fill="currentColor"/><line x1="0" y1="-20" x2="0" y2="-92" transform="rotate(0.0)"/><line x1="0" y1="-20" x2="0" y2="-92" transform="rotate(22.5)"/><line x1="0" y1="-20" x2="0" y2="-92" transform="rotate(45.0)"/><line x1="0" y1="-20" x2="0" y2="-92" transform="rotate(67.5)"/><line x1="0" y1="-20" x2="0" y2="-92" transform="rotate(90.0)"/><line x1="0" y1="-20" x2="0" y2="-92" transform="rotate(112.5)"/><line x1="0" y1="-20" x2="0" y2="-92" transform="rotate(135.0)"/><line x1="0" y1="-20" x2="0" y2="-92" transform="rotate(157.5)"/><line x1="0" y1="-20" x2="0" y2="-92" transform="rotate(180.0)"/><line x1="0" y1="-20" x2="0" y2="-92" transform="rotate(202.5)"/><line x1="0" y1="-20" x2="0" y2="-92" transform="rotate(225.0)"/><line x1="0" y1="-20" x2="0" y2="-92" transform="rotate(247.5)"/><line x1="0" y1="-20" x2="0" y2="-92" transform="rotate(270.0)"/><line x1="0" y1="-20" x2="0" y2="-92" transform="rotate(292.5)"/><line x1="0" y1="-20" x2="0" y2="-92" transform="rotate(315.0)"/><line x1="0" y1="-20" x2="0" y2="-92" transform="rotate(337.5)"/></g><g fill="currentColor" opacity=".75"><path d="M0,-96 C10,-108 10,-120 0,-130 C-10,-120 -10,-108 0,-96Z" transform="rotate(0.0)"/><path d="M0,-96 C10,-108 10,-120 0,-130 C-10,-120 -10,-108 0,-96Z" transform="rotate(22.5)"/><path d="M0,-96 C10,-108 10,-120 0,-130 C-10,-120 -10,-108 0,-96Z" transform="rotate(45.0)"/><path d="M0,-96 C10,-108 10,-120 0,-130 C-10,-120 -10,-108 0,-96Z" transform="rotate(67.5)"/><path d="M0,-96 C10,-108 10,-120 0,-130 C-10,-120 -10,-108 0,-96Z" transform="rotate(90.0)"/><path d="M0,-96 C10,-108 10,-120 0,-130 C-10,-120 -10,-108 0,-96Z" transform="rotate(112.5)"/><path d="M0,-96 C10,-108 10,-120 0,-130 C-10,-120 -10,-108 0,-96Z" transform="rotate(135.0)"/><path d="M0,-96 C10,-108 10,-120 0,-130 C-10,-120 -10,-108 0,-96Z" transform="rotate(157.5)"/><path d="M0,-96 C10,-108 10,-120 0,-130 C-10,-120 -10,-108 0,-96Z" transform="rotate(180.0)"/><path d="M0,-96 C10,-108 10,-120 0,-130 C-10,-120 -10,-108 0,-96Z" transform="rotate(202.5)"/><path d="M0,-96 C10,-108 10,-120 0,-130 C-10,-120 -10,-108 0,-96Z" transform="rotate(225.0)"/><path d="M0,-96 C10,-108 10,-120 0,-130 C-10,-120 -10,-108 0,-96Z" transform="rotate(247.5)"/><path d="M0,-96 C10,-108 10,-120 0,-130 C-10,-120 -10,-108 0,-96Z" transform="rotate(270.0)"/><path d="M0,-96 C10,-108 10,-120 0,-130 C-10,-120 -10,-108 0,-96Z" transform="rotate(292.5)"/><path d="M0,-96 C10,-108 10,-120 0,-130 C-10,-120 -10,-108 0,-96Z" transform="rotate(315.0)"/><path d="M0,-96 C10,-108 10,-120 0,-130 C-10,-120 -10,-108 0,-96Z" transform="rotate(337.5)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(0.0)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(11.25)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(22.5)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(33.75)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(45.0)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(56.25)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(67.5)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(78.75)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(90.0)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(101.25)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(112.5)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(123.75)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(135.0)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(146.25)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(157.5)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(168.75)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(180.0)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(191.25)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(202.5)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(213.75)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(225.0)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(236.25)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(247.5)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(258.75)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(270.0)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(281.25)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(292.5)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(303.75)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(315.0)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(326.25)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(337.5)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(348.75)"/></g></svg>
+      <svg class="hero-wheel r" viewBox="-150 -150 300 300" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.2"><circle r="92"/><circle r="20"/><circle r="8" fill="currentColor"/><line x1="0" y1="-20" x2="0" y2="-92" transform="rotate(0.0)"/><line x1="0" y1="-20" x2="0" y2="-92" transform="rotate(22.5)"/><line x1="0" y1="-20" x2="0" y2="-92" transform="rotate(45.0)"/><line x1="0" y1="-20" x2="0" y2="-92" transform="rotate(67.5)"/><line x1="0" y1="-20" x2="0" y2="-92" transform="rotate(90.0)"/><line x1="0" y1="-20" x2="0" y2="-92" transform="rotate(112.5)"/><line x1="0" y1="-20" x2="0" y2="-92" transform="rotate(135.0)"/><line x1="0" y1="-20" x2="0" y2="-92" transform="rotate(157.5)"/><line x1="0" y1="-20" x2="0" y2="-92" transform="rotate(180.0)"/><line x1="0" y1="-20" x2="0" y2="-92" transform="rotate(202.5)"/><line x1="0" y1="-20" x2="0" y2="-92" transform="rotate(225.0)"/><line x1="0" y1="-20" x2="0" y2="-92" transform="rotate(247.5)"/><line x1="0" y1="-20" x2="0" y2="-92" transform="rotate(270.0)"/><line x1="0" y1="-20" x2="0" y2="-92" transform="rotate(292.5)"/><line x1="0" y1="-20" x2="0" y2="-92" transform="rotate(315.0)"/><line x1="0" y1="-20" x2="0" y2="-92" transform="rotate(337.5)"/></g><g fill="currentColor" opacity=".75"><path d="M0,-96 C10,-108 10,-120 0,-130 C-10,-120 -10,-108 0,-96Z" transform="rotate(0.0)"/><path d="M0,-96 C10,-108 10,-120 0,-130 C-10,-120 -10,-108 0,-96Z" transform="rotate(22.5)"/><path d="M0,-96 C10,-108 10,-120 0,-130 C-10,-120 -10,-108 0,-96Z" transform="rotate(45.0)"/><path d="M0,-96 C10,-108 10,-120 0,-130 C-10,-120 -10,-108 0,-96Z" transform="rotate(67.5)"/><path d="M0,-96 C10,-108 10,-120 0,-130 C-10,-120 -10,-108 0,-96Z" transform="rotate(90.0)"/><path d="M0,-96 C10,-108 10,-120 0,-130 C-10,-120 -10,-108 0,-96Z" transform="rotate(112.5)"/><path d="M0,-96 C10,-108 10,-120 0,-130 C-10,-120 -10,-108 0,-96Z" transform="rotate(135.0)"/><path d="M0,-96 C10,-108 10,-120 0,-130 C-10,-120 -10,-108 0,-96Z" transform="rotate(157.5)"/><path d="M0,-96 C10,-108 10,-120 0,-130 C-10,-120 -10,-108 0,-96Z" transform="rotate(180.0)"/><path d="M0,-96 C10,-108 10,-120 0,-130 C-10,-120 -10,-108 0,-96Z" transform="rotate(202.5)"/><path d="M0,-96 C10,-108 10,-120 0,-130 C-10,-120 -10,-108 0,-96Z" transform="rotate(225.0)"/><path d="M0,-96 C10,-108 10,-120 0,-130 C-10,-120 -10,-108 0,-96Z" transform="rotate(247.5)"/><path d="M0,-96 C10,-108 10,-120 0,-130 C-10,-120 -10,-108 0,-96Z" transform="rotate(270.0)"/><path d="M0,-96 C10,-108 10,-120 0,-130 C-10,-120 -10,-108 0,-96Z" transform="rotate(292.5)"/><path d="M0,-96 C10,-108 10,-120 0,-130 C-10,-120 -10,-108 0,-96Z" transform="rotate(315.0)"/><path d="M0,-96 C10,-108 10,-120 0,-130 C-10,-120 -10,-108 0,-96Z" transform="rotate(337.5)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(0.0)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(11.25)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(22.5)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(33.75)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(45.0)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(56.25)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(67.5)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(78.75)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(90.0)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(101.25)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(112.5)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(123.75)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(135.0)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(146.25)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(157.5)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(168.75)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(180.0)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(191.25)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(202.5)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(213.75)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(225.0)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(236.25)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(247.5)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(258.75)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(270.0)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(281.25)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(292.5)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(303.75)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(315.0)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(326.25)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(337.5)"/><circle cx="0" cy="-140" r="2.6" transform="rotate(348.75)"/></g></svg>
+      <img class="hero-dancer dl" src="img/dancer-left.png" alt="" aria-hidden="true">
+      <img class="hero-dancer dr" src="img/dancer-right.png" alt="" aria-hidden="true">
       <div class="hero-copy">
         <span class="eyebrow">Since 1947 · Opening 2027</span>
         <h1>Three legacies, united.<br>One Odia table.</h1>
         <p class="sub">The Kalinga Kitchen, Utkal Biryani House and Chilika Banquet — heritage cooking and celebration, together.</p>
         <div class="cta"><a class="pill" href="#reserve">Pre-book a table</a><a class="lnk" href="#story">Our story</a></div>
-      </div>
-      <div class="hero-dancers-mobile" aria-hidden="true">
-        <div class="hero-dancer hero-dancer-mobile hero-dancer-mobile-left"></div>
-        <div class="hero-dancer hero-dancer-mobile hero-dancer-mobile-right"></div>
       </div>
     </div>
     <div class="launch">
