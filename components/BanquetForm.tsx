@@ -2,37 +2,50 @@
 
 import { useState, type FormEvent } from "react";
 import { useShop } from "./Shop";
-import { phoneOk, useFieldErrors } from "@/lib/forms";
+import { EVENT_TYPES, phoneOk, useFieldErrors } from "@/lib/forms";
+import { emailOk } from "@/lib/validate";
 import { BANQUET_MIN_DATE } from "@/lib/site";
+import { submitForm } from "@/lib/submit";
 
-const TYPES = ["Wedding Reception", "Wedding Ceremony", "Engagement / Roka", "Birthday", "Anniversary", "Corporate Event", "Other"];
+const TYPES = EVENT_TYPES;
 
 export function BanquetForm() {
-  const { save, confirmBox } = useShop();
+  const { confirmBox } = useShop();
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [type, setType] = useState(TYPES[0]);
   const [date, setDate] = useState("");
   const [guests, setGuests] = useState("");
   const { errs, setErrs, clear } = useFieldErrors();
 
-  const submit = (e: FormEvent<HTMLFormElement>) => {
+  const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (sending) return;
+    const form = e.currentTarget;
     const g = +guests;
     const bad = {
       name: name.trim().length <= 1,
       phone: !phoneOk(phone),
+      email: !emailOk(email.trim()),
       date: !(date && date >= BANQUET_MIN_DATE),
       guests: !(g >= 50 && g <= 100),
     };
     setErrs(bad);
-    if (bad.name || bad.phone || bad.date || bad.guests) {
-      const first = (["name", "phone", "date", "guests"] as const).find((k) => bad[k]);
-      (e.currentTarget.elements.namedItem(first!) as HTMLInputElement | null)?.focus();
+    if (bad.name || bad.phone || bad.email || bad.date || bad.guests) {
+      const first = (["name", "phone", "email", "date", "guests"] as const).find((k) => bad[k]);
+      (form.elements.namedItem(first!) as HTMLInputElement | null)?.focus();
       return;
     }
-    const d = { name: name.trim(), phone: phone.trim(), type, date, guests: g };
-    const ref = save("banquet", d);
+    const d = { name: name.trim(), phone: phone.trim(), email: email.trim(), type, date, guests: g };
+    setSending(true);
+    setError("");
+    const r = await submitForm("enquiry", { ...d, website: (new FormData(form).get("website") as string) || "" });
+    setSending(false);
+    if (!r.ok) return setError(r.error);
+    const ref = r.ref;
     confirmBox(
       "Enquiry received",
       [<>Thank you, <b>{d.name}</b>.</>, `${d.type} · ${d.guests} guests · ${d.date}`],
@@ -41,6 +54,7 @@ export function BanquetForm() {
     );
     setName("");
     setPhone("");
+    setEmail("");
     setType(TYPES[0]);
     setDate("");
     setGuests("");
@@ -61,6 +75,11 @@ export function BanquetForm() {
         <input id="bq-phone" name="phone" type="tel" inputMode="tel" placeholder="+91 98765 43210" autoComplete="tel" value={phone} onChange={(e) => { setPhone(e.target.value); clear("phone"); }} />
         <div className="em">Enter a valid 10-digit number.</div>
       </div>
+      <div className={cls("email")}>
+        <label htmlFor="bq-email">Email <span style={{ opacity: 0.6 }}>(optional — for your confirmation)</span></label>
+        <input id="bq-email" name="email" type="email" inputMode="email" placeholder="you@example.com" autoComplete="email" value={email} onChange={(e) => { setEmail(e.target.value); clear("email"); }} />
+        <div className="em">Enter a valid email address.</div>
+      </div>
       <div className="fld">
         <label htmlFor="bq-type">Event</label>
         <select id="bq-type" name="type" value={type} onChange={(e) => setType(e.target.value)}>
@@ -79,7 +98,9 @@ export function BanquetForm() {
           <div className="em">Between 50 and 100.</div>
         </div>
       </div>
-      <button className="pill" type="submit">Send enquiry</button>
+      <input name="website" className="hp" tabIndex={-1} autoComplete="off" aria-hidden="true" />
+      {error ? <p className="form-err" role="alert">{error}</p> : null}
+      <button className="pill" type="submit" disabled={sending}>{sending ? "Sending…" : "Send enquiry"}</button>
     </form>
   );
 }

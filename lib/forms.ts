@@ -1,11 +1,8 @@
 // Validation + form helpers shared by the banquet, reservation and order forms.
 import { useState } from "react";
-import { OPENING, type House } from "./site";
+import { OPENING } from "./site";
 
-export const phoneOk = (v: string) => {
-  const d = v.replace(/\D/g, "");
-  return d.length === 10 || (d.length === 12 && d.startsWith("91")) || (d.length === 11 && d.startsWith("0"));
-};
+export { phoneOk, SLOTS, GUESTS, EVENT_TYPES } from "./validate";
 
 /** Today as YYYY-MM-DD in the visitor's local time zone. */
 export const todayStr = () => {
@@ -28,11 +25,3 @@ export function useFieldErrors() {
   const clear = (k: string) => setErrs((e) => (e[k] ? { ...e, [k]: false } : e));
   return { errs, setErrs, clear };
 }
-
-export const SLOTS: Record<House, string[]> = {
-  "Utkal Biryani House": ["07:00 PM (Dinner)", "08:00 PM (Dinner)", "09:00 PM (Dinner)", "10:00 PM (Last seating)"],
-  "The Kalinga Kitchen": [
-    "12:30 PM (Lunch)", "01:30 PM (Lunch)", "02:30 PM (Lunch)",
-    "07:00 PM (Dinner)", "08:00 PM (Dinner)", "09:00 PM (Dinner)", "10:00 PM (Late Dinner)",
-  ],
-};

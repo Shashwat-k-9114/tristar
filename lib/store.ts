@@ -18,4 +18,3 @@ export const store = {
 };
 
 export const CART_KEY = "ts3_cart";
-export const INBOX_KEY = "ts2_inbox";

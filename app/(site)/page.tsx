@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { BanquetForm } from "@/components/BanquetForm";
 import { DayNight } from "@/components/DayNight";
-import { InboxLink } from "@/components/InboxLink";
 import { LaunchCards } from "@/components/LaunchCards";
 import { MenuBrowser } from "@/components/MenuBrowser";
 import { Navbar } from "@/components/Navbar";
@@ -209,7 +208,7 @@ export default function Home() {
             <div><h4>Hours</h4><ul><li>Mon – Thu · 11:30 – 22:30</li><li>Fri – Sun · 11:00 – 23:00</li><li>Open terrace dining · 7 – 10 PM</li></ul></div>
             <div><h4>Contact</h4><ul><li>First Floor, TriStar Building (HDFC Bank Building), Kalimandir Road, Jharsuguda – 768202</li><li><a href={PHONE_HREF}>{PHONE_TEXT}</a></li><li><a href={`mailto:${EMAIL}`}>{EMAIL}</a></li></ul></div>
           </div>
-          <div className="f-bot"><span>Copyright © 2026 TriStar 1947 · Tristar Foods LLP. All rights reserved.</span><InboxLink /></div>
+          <div className="f-bot"><span>Copyright © 2026 TriStar 1947 · Tristar Foods LLP. All rights reserved.</span><a href="/admin">Staff login</a></div>
         </div>
       </footer>
 

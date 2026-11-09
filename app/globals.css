@@ -373,3 +373,8 @@ th{font-size:11px;color:var(--mute);font-weight:600}
   .legend .lnk{margin-left:0}
   .hero .cta{flex-direction:column;gap:18px}
 }
+
+/* form feedback + honeypot (added for the Google Sheets backend) */
+.form-err{color:#ff6961;font-size:14px;line-height:1.4;margin:6px 4px 0}
+.hp{position:absolute!important;left:-9999px!important;width:1px!important;height:1px!important;min-height:0!important;opacity:0;pointer-events:none}
+form .pill:disabled{opacity:.6;cursor:progress}

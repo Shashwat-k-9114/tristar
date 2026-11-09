@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { IconSprite } from "@/components/Icon";
-import { ShopProvider } from "@/components/Shop";
+import { SITE_URL } from "@/lib/siteUrl";
 import "./globals.css";
 
 const inter = Inter({
@@ -16,7 +16,7 @@ const DESCRIPTION =
   "TriStar 1947: three houses, one Odia table. Utkal Biryani House, The Kalinga Kitchen and Chilika Banquet.";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
+  metadataBase: new URL(SITE_URL),
   title: TITLE,
   description: DESCRIPTION,
   openGraph: {
@@ -44,7 +44,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <style>{".rv{opacity:1!important;transform:none!important}"}</style>
         </noscript>
         <IconSprite />
-        <ShopProvider>{children}</ShopProvider>
+        {children}
       </body>
     </html>
   );

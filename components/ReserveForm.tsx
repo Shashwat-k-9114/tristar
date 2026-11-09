@@ -3,17 +3,21 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { SELECT_HOUSE_EVENT } from "./LaunchCards";
 import { useShop } from "./Shop";
-import { SLOTS, fmtD, minFor, phoneOk, todayStr, useFieldErrors } from "@/lib/forms";
+import { GUESTS, SLOTS, fmtD, minFor, phoneOk, todayStr, useFieldErrors } from "@/lib/forms";
+import { emailOk } from "@/lib/validate";
 import { OPENING, type House } from "@/lib/site";
+import { submitForm } from "@/lib/submit";
 
 const DEFAULT_HOUSE: House = "Utkal Biryani House";
 const DEFAULT_GUESTS = "2 Guests";
-const GUESTS = ["1 Guest", "2 Guests", "3 Guests", "4 Guests", "5 Guests", "6 Guests", "7 Guests", "8 Guests", "9–15 Guests"];
 
 export function ReserveForm() {
-  const { save, confirmBox } = useShop();
+  const { confirmBox } = useShop();
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [seat, setSeat] = useState<House>(DEFAULT_HOUSE);
   const [time, setTime] = useState(SLOTS[DEFAULT_HOUSE][0]);
   const [date, setDate] = useState("");
@@ -53,21 +57,29 @@ export function ReserveForm() {
     : "";
   const dateErr = ready && min ? "Choose " + fmtD(min) + " or later." : "Choose a date on or after opening.";
 
-  const submit = (e: FormEvent<HTMLFormElement>) => {
+  const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (sending) return;
+    const form = e.currentTarget;
     const bad = {
       name: name.trim().length <= 1,
       phone: !phoneOk(phone),
+      email: !emailOk(email.trim()),
       date: !(date && date >= minFor(seat)),
     };
     setErrs(bad);
-    if (bad.name || bad.phone || bad.date) {
-      const first = (["name", "phone", "date"] as const).find((k) => bad[k]);
-      (e.currentTarget.elements.namedItem(first!) as HTMLInputElement | null)?.focus();
+    if (bad.name || bad.phone || bad.email || bad.date) {
+      const first = (["name", "phone", "email", "date"] as const).find((k) => bad[k]);
+      (form.elements.namedItem(first!) as HTMLInputElement | null)?.focus();
       return;
     }
-    const d = { name: name.trim(), phone: phone.trim(), date, time, guests, seating: seat };
-    const ref = save("reservation", d);
+    const d = { name: name.trim(), phone: phone.trim(), email: email.trim(), date, time, guests, seating: seat };
+    setSending(true);
+    setError("");
+    const r = await submitForm("reservation", { ...d, website: (new FormData(form).get("website") as string) || "" });
+    setSending(false);
+    if (!r.ok) return setError(r.error);
+    const ref = r.ref;
     confirmBox(
       "Booking requested",
       [<><b>{d.name}</b>, we have your request.</>, <>{d.date} · {d.time}<br />{d.guests} · {d.seating}</>],
@@ -76,6 +88,7 @@ export function ReserveForm() {
     );
     setName("");
     setPhone("");
+    setEmail("");
     setGuests(DEFAULT_GUESTS);
     setSeat(DEFAULT_HOUSE);
     setTime(SLOTS[DEFAULT_HOUSE][0]);
@@ -96,6 +109,11 @@ export function ReserveForm() {
           <input id="r-phone" name="phone" type="tel" inputMode="tel" placeholder="+91 91234 56789" autoComplete="tel" value={phone} onChange={(e) => { setPhone(e.target.value); clear("phone"); }} />
           <div className="em">Enter a valid 10-digit number.</div>
         </div>
+      </div>
+      <div className={cls("email")}>
+        <label htmlFor="r-email">Email <span style={{ opacity: 0.6 }}>(optional — for your confirmation)</span></label>
+        <input id="r-email" name="email" type="email" inputMode="email" placeholder="you@example.com" autoComplete="email" value={email} onChange={(e) => { setEmail(e.target.value); clear("email"); }} />
+        <div className="em">Enter a valid email address.</div>
       </div>
       <div className="row2">
         <div className={cls("date")}>
@@ -128,7 +146,9 @@ export function ReserveForm() {
           ))}
         </div>
       </div>
-      <button className="pill" type="submit">Confirm reservation</button>
+      <input name="website" className="hp" tabIndex={-1} autoComplete="off" aria-hidden="true" />
+      {error ? <p className="form-err" role="alert">{error}</p> : null}
+      <button className="pill" type="submit" disabled={sending}>{sending ? "Sending…" : "Confirm reservation"}</button>
     </form>
   );
 }

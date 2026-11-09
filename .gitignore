@@ -7,3 +7,8 @@ next-env.d.ts
 .vercel
 __pycache__/
 npm-debug.log*
+
+.data/
+.env
+.env.local
+!.env.example

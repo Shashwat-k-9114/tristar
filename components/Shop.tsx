@@ -13,9 +13,11 @@ import {
 } from "react";
 import { Icon } from "./Icon";
 import { MENU, rupee } from "@/lib/menu";
-import { CART_KEY, INBOX_KEY, store } from "@/lib/store";
+import { CART_KEY, store } from "@/lib/store";
+import { submitForm } from "@/lib/submit";
 import { WA_NUMBER } from "@/lib/site";
 import { phoneOk, useFieldErrors } from "@/lib/forms";
+import { emailOk } from "@/lib/validate";
 
 type Cart = Record<string, number>;
 
@@ -37,7 +39,6 @@ interface ShopCtx {
   setNavOpen: (o: boolean) => void;
   showModal: (node: ReactNode, wide?: boolean) => void;
   closeModal: () => void;
-  save: (kind: string, data: Record<string, unknown>) => string;
   confirmBox: (title: string, lines: ReactNode[], ref: string, wa: string) => void;
 }
 
@@ -101,14 +102,6 @@ export function ShopProvider({ children }: { children: ReactNode }) {
   const showModal = useCallback((node: ReactNode, wide = false) => setModal({ node, wide }), []);
   const closeModal = useCallback(() => setModal(null), []);
 
-  const save = useCallback((kind: string, data: Record<string, unknown>) => {
-    const all = store.get<Record<string, unknown>[]>(INBOX_KEY, []);
-    const ref = kind.slice(0, 3).toUpperCase() + "-" + Date.now().toString(36).toUpperCase().slice(-6);
-    all.unshift(Object.assign({ ref, kind, at: new Date().toISOString() }, data));
-    store.set(INBOX_KEY, all);
-    return ref;
-  }, []);
-
   const confirmBox = useCallback(
     (title: string, lines: ReactNode[], ref: string, wa: string) => {
       showModal(
@@ -149,8 +142,8 @@ export function ShopProvider({ children }: { children: ReactNode }) {
   const cartCount = cartIds.reduce((a, k) => a + cart[k], 0);
 
   const value = useMemo<ShopCtx>(
-    () => ({ cart, cartCount, inc, dec, clear, add, toast, openCart, navOpen, setNavOpen, showModal, closeModal, save, confirmBox }),
-    [cart, cartCount, inc, dec, clear, add, toast, openCart, navOpen, showModal, closeModal, save, confirmBox],
+    () => ({ cart, cartCount, inc, dec, clear, add, toast, openCart, navOpen, setNavOpen, showModal, closeModal, confirmBox }),
+    [cart, cartCount, inc, dec, clear, add, toast, openCart, navOpen, showModal, closeModal, confirmBox],
   );
 
   return (
@@ -176,9 +169,12 @@ export function ShopProvider({ children }: { children: ReactNode }) {
 }
 
 function CartDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const { cart, inc, dec, clear: clearCart, save, confirmBox } = useShop();
+  const { cart, inc, dec, clear: clearCart, confirmBox } = useShop();
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const { errs, setErrs, clear } = useFieldErrors();
   const ids = Object.keys(cart).filter((id) => MENU.some((m) => m.id == (id as unknown as number)));
 
@@ -200,29 +196,43 @@ function CartDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
     );
   });
 
-  const submit = (e: FormEvent<HTMLFormElement>) => {
+  const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (sending) return;
     const e1 = name.trim().length <= 1,
-      e2 = !phoneOk(phone);
-    setErrs({ name: e1, phone: e2 });
-    if (e1 || e2) return;
+      e2 = !phoneOk(phone),
+      e3 = !emailOk(email.trim());
+    setErrs({ name: e1, phone: e2, email: e3 });
+    if (e1 || e2 || e3) return;
     let t = 0;
     const items = ids.map((id) => {
       const m = MENU.find((x) => x.id == (id as unknown as number))!;
       t += (m.price as number) * cart[id];
       return `${cart[id]}× ${m.name}`;
     });
-    const d = { name: name.trim(), phone: phone.trim(), items: items.join(", "), total: t };
-    const ref = save("order", d);
+    const website = (new FormData(e.currentTarget).get("website") as string) || "";
+    setSending(true);
+    setError("");
+    const r = await submitForm("order", {
+      name: name.trim(),
+      phone: phone.trim(),
+      email: email.trim(),
+      items: ids.map((id) => ({ id: Number(id), qty: cart[id] })),
+      website,
+    });
+    setSending(false);
+    if (!r.ok) return setError(r.error);
+    const d = { name: name.trim(), phone: phone.trim(), items: items.join(", ") };
     clearCart();
     setName("");
     setPhone("");
+    setEmail("");
     onClose();
     confirmBox(
       "Order placed",
       [<>Thank you, <b>{d.name}</b>.</>, d.items, <>Total <b>{rupee(t)}</b></>],
-      ref,
-      `Hello TriStar 1947, new order (${ref}): ${d.items}. Total ${rupee(t)}. Name: ${d.name}, Phone: ${d.phone}`,
+      r.ref,
+      `Hello TriStar 1947, new order (${r.ref}): ${d.items}. Total ${rupee(t)}. Name: ${d.name}, Phone: ${d.phone}`,
     );
   };
 
@@ -240,7 +250,10 @@ function CartDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
         <form id="ordForm" noValidate onSubmit={submit}>
           <div className={`fld${errs.name ? " err" : ""}`}><input name="name" placeholder="Your name" aria-label="Your name" value={name} onChange={(e) => { setName(e.target.value); clear("name"); }} /><div className="em">Enter your name.</div></div>
           <div className={`fld${errs.phone ? " err" : ""}`}><input name="phone" type="tel" inputMode="tel" placeholder="Phone number" aria-label="Phone number" value={phone} onChange={(e) => { setPhone(e.target.value); clear("phone"); }} /><div className="em">Enter a valid 10-digit number.</div></div>
-          <button className="pill" type="submit">Place order</button>
+          <div className={`fld${errs.email ? " err" : ""}`}><input name="email" type="email" inputMode="email" placeholder="Email (optional, for your receipt)" aria-label="Email (optional)" autoComplete="email" value={email} onChange={(e) => { setEmail(e.target.value); clear("email"); }} /><div className="em">Enter a valid email address.</div></div>
+          <input name="website" className="hp" tabIndex={-1} autoComplete="off" aria-hidden="true" />
+          {error ? <p className="form-err" role="alert">{error}</p> : null}
+          <button className="pill" type="submit" disabled={sending}>{sending ? "Placing order…" : "Place order"}</button>
         </form>
       </div>
     </aside>
