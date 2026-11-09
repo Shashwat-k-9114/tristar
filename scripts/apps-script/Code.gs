@@ -14,11 +14,15 @@ const SECRET = 'PASTE_A_LONG_RANDOM_STRING_HERE';
 const NUMERIC_HEADERS = ['Total (₹)'];
 
 function doPost(e) {
-  const lock = LockService.getScriptLock();
-  lock.waitLock(20000);
+  // Only writes take the lock. Reads and email sends run freely so a slow email never blocks the dashboard.
+  let lock = null;
   try {
     const req = JSON.parse(e.postData.contents);
     if (!SECRET || SECRET.indexOf('PASTE_') === 0 || req.secret !== SECRET) return out({ ok: false, error: 'unauthorized' });
+    if (req.action === 'ensure' || req.action === 'append' || req.action === 'update') {
+      lock = LockService.getScriptLock();
+      lock.waitLock(20000);
+    }
     const ss = SpreadsheetApp.getActiveSpreadsheet();
 
     switch (req.action) {
@@ -72,7 +76,7 @@ function doPost(e) {
   } catch (err) {
     return out({ ok: false, error: String(err) });
   } finally {
-    lock.releaseLock();
+    if (lock) lock.releaseLock();
   }
 }
 

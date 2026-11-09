@@ -127,6 +127,9 @@ class AppsScriptStore implements Store {
     private secret: string,
   ) {}
 
+  // Reads are cached for a few seconds and shared between concurrent callers; any write clears the cache.
+  private cache = new Map<string, { at: number; p: Promise<string[][]> }>();
+
   private async call<T = unknown>(action: string, payload: object = {}): Promise<T> {
     // Apps Script answers a POST with a redirect to the result; fetch follows it automatically.
     const res = await fetch(this.url, {
@@ -135,6 +138,7 @@ class AppsScriptStore implements Store {
       body: JSON.stringify({ secret: this.secret, action, ...payload }),
       cache: "no-store",
       redirect: "follow",
+      signal: AbortSignal.timeout(30_000),
     });
     const text = await res.text();
     let j: { ok?: boolean; error?: string } & T;
@@ -157,13 +161,22 @@ class AppsScriptStore implements Store {
     this.ready = true;
   }
   async append(tab: string, row: (string | number)[]) {
+    this.cache.clear();
     await this.call("append", { tab, row });
+    this.cache.clear();
   }
-  async read(tab: string) {
-    return (await this.call<{ values?: string[][] }>("read", { tab })).values ?? [];
+  read(tab: string) {
+    const hit = this.cache.get(tab);
+    if (hit && Date.now() - hit.at < 4000) return hit.p;
+    const p = this.call<{ values?: string[][] }>("read", { tab }).then((r) => r.values ?? []);
+    this.cache.set(tab, { at: Date.now(), p });
+    p.catch(() => this.cache.delete(tab));
+    return p;
   }
   async update(tab: string, rowNumber: number, startCol: number, values: (string | number)[]) {
+    this.cache.clear();
     await this.call("update", { tab, row: rowNumber, col: startCol, values });
+    this.cache.clear();
   }
 }
 
