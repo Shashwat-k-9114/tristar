@@ -18,9 +18,16 @@ const SENDER_NAME = "TriStar 1947";
  * In local development with LOCAL_STORE=1 nothing is sent; the message is written to .data/outbox/ for preview.
  */
 export async function sendMail(m: Mail): Promise<"sent" | "outbox"> {
-  const to = (Array.isArray(m.to) ? m.to : [m.to]).join(",");
+  const list = Array.isArray(m.to) ? m.to : [m.to];
+  const to = list.join(",");
   if (process.env.APPS_SCRIPT_URL && process.env.APPS_SCRIPT_SECRET) {
-    await appsScriptCall("sendEmail", { to, subject: m.subject, html: m.html, text: m.text, replyTo: m.replyTo, name: SENDER_NAME });
+    // One message per recipient: multi-recipient sends were not being delivered, and a bad address then can't block the rest.
+    const results = await Promise.allSettled(
+      list.map((one) => appsScriptCall("sendEmail", { to: one, subject: m.subject, html: m.html, text: m.text, replyTo: m.replyTo, name: SENDER_NAME })),
+    );
+    const failed = results.filter((r): r is PromiseRejectedResult => r.status === "rejected");
+    if (failed.length === list.length) throw failed[0].reason;
+    if (failed.length) console.error(`[mail] ${failed.length}/${list.length} recipients failed:`, failed.map((f) => String(f.reason)).join("; "));
     return "sent";
   }
   if (process.env.LOCAL_STORE === "1" && process.env.NODE_ENV !== "production") {
