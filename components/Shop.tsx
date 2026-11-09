@@ -250,7 +250,7 @@ function CartDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
         <form id="ordForm" noValidate onSubmit={submit}>
           <div className={`fld${errs.name ? " err" : ""}`}><input name="name" placeholder="Your name" aria-label="Your name" value={name} onChange={(e) => { setName(e.target.value); clear("name"); }} /><div className="em">Enter your name.</div></div>
           <div className={`fld${errs.phone ? " err" : ""}`}><input name="phone" type="tel" inputMode="tel" placeholder="Phone number" aria-label="Phone number" value={phone} onChange={(e) => { setPhone(e.target.value); clear("phone"); }} /><div className="em">Enter a valid 10-digit number.</div></div>
-          <div className={`fld${errs.email ? " err" : ""}`}><input name="email" type="email" inputMode="email" placeholder="Email (optional, for your receipt)" aria-label="Email (optional)" autoComplete="email" value={email} onChange={(e) => { setEmail(e.target.value); clear("email"); }} /><div className="em">Enter a valid email address.</div></div>
+          <div className={`fld${errs.email ? " err" : ""}`}><input name="email" type="email" inputMode="email" placeholder="Email (for your confirmation)" aria-label="Email" autoComplete="email" value={email} onChange={(e) => { setEmail(e.target.value); clear("email"); }} /><div className="em">Enter a valid email address.</div></div>
           <input name="website" className="hp" tabIndex={-1} autoComplete="off" aria-hidden="true" />
           {error ? <p className="form-err" role="alert">{error}</p> : null}
           <button className="pill" type="submit" disabled={sending}>{sending ? "Placing order…" : "Place order"}</button>

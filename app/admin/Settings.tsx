@@ -156,7 +156,7 @@ export function Settings() {
           <div className="adm-trow">
             <div>
               <b>Email guests a confirmation</b>
-              <span>Sent to the guest&apos;s address when they give one on the order, booking or enquiry form (the email field is optional).</span>
+              <span>Sent to the guest&apos;s address from the email they enter on the order, booking or enquiry form.</span>
             </div>
             {toggle(draft.customerConfirmations, (v) => setDraft({ ...draft, customerConfirmations: v }), "Guest confirmations")}
           </div>

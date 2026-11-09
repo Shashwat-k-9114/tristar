@@ -76,7 +76,7 @@ export function BanquetForm() {
         <div className="em">Enter a valid 10-digit number.</div>
       </div>
       <div className={cls("email")}>
-        <label htmlFor="bq-email">Email <span style={{ opacity: 0.6 }}>(optional — for your confirmation)</span></label>
+        <label htmlFor="bq-email">Email <span style={{ opacity: 0.6 }}>(for your confirmation)</span></label>
         <input id="bq-email" name="email" type="email" inputMode="email" placeholder="you@example.com" autoComplete="email" value={email} onChange={(e) => { setEmail(e.target.value); clear("email"); }} />
         <div className="em">Enter a valid email address.</div>
       </div>

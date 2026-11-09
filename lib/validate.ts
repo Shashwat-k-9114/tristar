@@ -30,14 +30,14 @@ export interface OrderInput { name: string; phone: string; email: string; items:
 export interface ReservationInput { name: string; phone: string; email: string; date: string; time: string; guests: string; seating: House }
 export interface EnquiryInput { name: string; phone: string; email: string; type: string; date: string; guests: number }
 
-/** Optional email: empty is allowed; anything entered must look like an address. */
-export const emailOk = (v: string) => v === "" || /^[^\s@<>",;]{1,64}@[^\s@<>",;]+\.[^\s@<>",;]{2,}$/.test(v);
+/** Email is required (confirmations are sent to it) and must look like an address. */
+export const emailOk = (v: string) => /^[^\s@<>",;]{1,64}@[^\s@<>",;]+\.[^\s@<>",;]{2,}$/.test(v);
 
 function contact(b: Record<string, unknown>): Parsed<{ name: string; phone: string; email: string }> {
   const name = str(b.name, 80), phone = str(b.phone, 20), email = str(b.email, 120).toLowerCase();
   if (name.length < 2) return { ok: false, error: "Please enter your name." };
   if (!phoneOk(phone)) return { ok: false, error: "Enter a valid 10-digit phone number." };
-  if (!emailOk(email)) return { ok: false, error: "That email address doesn't look right." };
+  if (!emailOk(email)) return { ok: false, error: "Please enter a valid email address." };
   return { ok: true, data: { name, phone, email } };
 }
 

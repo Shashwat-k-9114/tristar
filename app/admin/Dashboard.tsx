@@ -48,19 +48,19 @@ export function Dashboard() {
     busy.current = true;
     if (!silent) setLoading(true);
     try {
-      const results = await Promise.all(
-        KINDS.map(async (k) => {
-          const res = await fetch(`/api/admin/records?kind=${k.id}`, { cache: "no-store" });
-          if (res.status === 401) {
-            location.reload();
-            throw new Error("Session expired");
-          }
-          const j = (await res.json()) as { ok: boolean; error?: string } & Data;
-          if (!j.ok) throw new Error(j.error || "Failed to load");
-          return [k.id, { columns: j.columns, rows: j.rows }] as const;
-        }),
-      );
-      setData(Object.fromEntries(results));
+      // One at a time: the Google Sheet backend serialises requests, so parallel calls just queue up and can time out.
+      const results: (readonly [Kind, Data])[] = [];
+      for (const k of KINDS) {
+        const res = await fetch(`/api/admin/records?kind=${k.id}`, { cache: "no-store" });
+        if (res.status === 401) {
+          location.reload();
+          throw new Error("Session expired");
+        }
+        const j = (await res.json()) as { ok: boolean; error?: string } & Data;
+        if (!j.ok) throw new Error(j.error || "Failed to load");
+        results.push([k.id, { columns: j.columns, rows: j.rows }] as const);
+        setData(Object.fromEntries(results));
+      }
       setUpdated(new Date());
       setError("");
     } catch (e) {

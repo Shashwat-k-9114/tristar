@@ -111,7 +111,7 @@ export function ReserveForm() {
         </div>
       </div>
       <div className={cls("email")}>
-        <label htmlFor="r-email">Email <span style={{ opacity: 0.6 }}>(optional — for your confirmation)</span></label>
+        <label htmlFor="r-email">Email <span style={{ opacity: 0.6 }}>(for your confirmation)</span></label>
         <input id="r-email" name="email" type="email" inputMode="email" placeholder="you@example.com" autoComplete="email" value={email} onChange={(e) => { setEmail(e.target.value); clear("email"); }} />
         <div className="em">Enter a valid email address.</div>
       </div>
