@@ -1,0 +1,7 @@
+320x640 {"docOverflow":0,"visibleTextClipped":[]} errors []
+360x780 {"docOverflow":0,"visibleTextClipped":[]} errors []
+390x844 {"docOverflow":0,"visibleTextClipped":[]} errors []
+768x1024 {"docOverflow":0,"visibleTextClipped":[]} errors []
+1024x768 {"docOverflow":0,"visibleTextClipped":[]} errors []
+1440x900 {"docOverflow":0,"visibleTextClipped":[]} errors []
+1920x1080 {"docOverflow":0,"visibleTextClipped":[]} errors []

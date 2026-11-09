@@ -1,0 +1,8 @@
+base                   LCP median 1824 ms [1720–3000] | FCP 1824 | 238 KB | layout NaN style NaN script NaN ms
+full-from-start        LCP median 2796 ms [2752–2920] | FCP 2796 | 238 KB | layout NaN style NaN script NaN ms
+no-cv-class            LCP median 3060 ms [2676–3412] | FCP 3060 | 238 KB | layout NaN style NaN script NaN ms
+no-text-wrap-balance   LCP median 1760 ms [1720–1892] | FCP 1760 | 238 KB | layout NaN style NaN script NaN ms
+no-container-type      LCP median 1600 ms [1544–1692] | FCP 1600 | 238 KB | layout NaN style NaN script NaN ms
+no-badges-anywhere     LCP median 1300 ms [1208–1392] | FCP 1300 | 238 KB | layout NaN style NaN script NaN ms
+no-below-fold          LCP median 1140 ms [1120–1232] | FCP 1140 | 187 KB | layout NaN style NaN script NaN ms
+no-javascript          LCP median 1520 ms [1480–1752] | FCP 1520 | 90 KB | layout NaN style NaN script NaN ms

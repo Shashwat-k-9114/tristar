@@ -1,0 +1,8 @@
+base                     LCP s: 3.86 5.63 4.68 | median 4.68 | FCP 1.11 2.36 1.25
+no-grain                 LCP s: 3.60 3.55 3.69 | median 3.60 | FCP 1.09 1.08 1.08
+no-text-shadow           LCP s: 3.73 3.77 3.76 | median 3.76 | FCP 1.09 1.08 1.12
+no-neon-glow-filter      LCP s: 4.01 5.36 4.09 | median 4.09 | FCP 1.09 1.43 1.08
+no-steam                 LCP s: 4.18 5.24 3.66 | median 4.18 | FCP 1.17 1.62 1.07
+no-slash-ring-heat       LCP s: 3.65 3.61 3.97 | median 3.65 | FCP 1.08 1.07 1.08
+no-atmos-all             LCP s: 3.65 3.70 3.69 | median 3.69 | FCP 1.08 1.09 1.08
+no-hero-effects-at-all   LCP s: 3.83 3.84 3.63 | median 3.83 | FCP 1.07 1.08 1.08

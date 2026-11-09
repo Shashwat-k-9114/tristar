@@ -1,0 +1,16 @@
+import { execSync } from "node:child_process";
+import fs from "node:fs";
+import { chromium } from "@playwright/test";
+process.env.CHROME_PATH = chromium.executablePath();
+const url = process.env.URL || "http://localhost:3100/";
+const out = process.env.OUT || "qa/lh-one.json";
+execSync(`npx --yes lighthouse ${url} --only-categories=performance --chrome-flags="--headless=new --no-sandbox" --output=json --output-path=${out} --quiet`, { stdio: "ignore" });
+const r = JSON.parse(fs.readFileSync(out, "utf8")); const a = r.audits;
+const n = (k) => a[k]?.numericValue;
+console.log({ perf: r.categories.performance.score, lcp: n("largest-contentful-paint"), fcp: n("first-contentful-paint"), tbt: n("total-blocking-time"), si: n("speed-index"), tti: n("interactive") });
+console.log("LCP el:", JSON.stringify(a["largest-contentful-paint-element"]?.details?.items?.map(i => i.items?.map(x => x.node?.snippet ?? x)) ?? null).slice(0, 400));
+console.log("lcp breakdown:", JSON.stringify(a["lcp-breakdown-insight"]?.details?.items ?? a["largest-contentful-paint-element"]?.details?.items?.[1] ?? null).slice(0, 600));
+console.log("main-thread:", (a["mainthread-work-breakdown"]?.details?.items ?? []).map((i) => `${i.groupLabel}:${Math.round(i.duration)}`).join(" | "));
+console.log("bootup:", (a["bootup-time"]?.details?.items ?? []).slice(0, 6).map((i) => `${i.url.split("/").slice(-1)[0].slice(0, 40)} total=${Math.round(i.total)} script=${Math.round(i.scripting)}`).join(" | "));
+console.log("long tasks:", (a["long-tasks"]?.details?.items ?? []).slice(0, 8).map((i) => `${i.url.split("/").slice(-1)[0].slice(0, 30)} start=${Math.round(i.startTime)} dur=${Math.round(i.duration)}`).join(" | "));
+console.log("requests:", (a["network-requests"]?.details?.items ?? []).map((i) => `${i.url.split("/").slice(-1)[0].slice(0, 28)} ${Math.round(i.transferSize / 1024)}KB @${Math.round(i.networkRequestTime)}-${Math.round(i.networkEndTime)}`).join("\n  "));

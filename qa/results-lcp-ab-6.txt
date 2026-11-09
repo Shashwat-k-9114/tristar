@@ -1,0 +1,5 @@
+base                   LCP median 1776 ms [1480–2948] | FCP 1776 | 238 KB | layout 1240 style 516 script 385 ms
+no-family-section      LCP median 1460 ms [1408–2140] | FCP 1460 | 238 KB | layout 898 style 309 script 340 ms
+no-badge-text          LCP median 1312 ms [1268–1464] | FCP 1312 | 238 KB | layout 732 style 351 script 323 ms
+no-hero-badge          LCP median 1360 ms [1328–1420] | FCP 1360 | 238 KB | layout 973 style 328 script 345 ms
+no-hero-index          LCP median 1408 ms [1328–1560] | FCP 1408 | 238 KB | layout 1008 style 330 script 325 ms
