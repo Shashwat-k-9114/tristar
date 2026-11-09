@@ -4,7 +4,7 @@ Downloads free-licensed dish photos from Wikimedia Commons into img/dishes/,
 writes img/dishes/photos.js (the site picks it up automatically) and
 img/dishes/CREDITS.txt (author + licence for every photo).
 
-Run from the project folder (the one with index.html):
+Run from the project root (the folder with package.json), then run `npm run photos`:
     python download_dish_photos.py        (or: py download_dish_photos.py)
 
 Needs internet and Python 3.8+. No extra packages.
@@ -18,7 +18,7 @@ dish, drop it into img/dishes/ as <slug>.jpg and add the slug to photos.js
 import json, os, re, sys, time, urllib.parse, urllib.request
 
 WIDTH = 1600
-OUT = os.path.join("img", "dishes")
+OUT = os.path.join("public", "img", "dishes")
 API = "https://commons.wikimedia.org/w/api.php"
 UA = "TriStar1947-site/1.0 (menu photos; contact: kashyapshashwat77@gmail.com)"
 

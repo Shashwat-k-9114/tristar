@@ -1,0 +1,162 @@
+{
+  "aaloo-singada-classic": {
+    "w": 1920,
+    "h": 3404
+  },
+  "chhena-poda": {
+    "w": 1920,
+    "h": 1229
+  },
+  "chicken-baus-poda": {
+    "w": 1200,
+    "h": 798
+  },
+  "chicken-biryani-normal": {
+    "w": 1920,
+    "h": 2560
+  },
+  "chicken-pulao-normal": {
+    "w": 1920,
+    "h": 2009
+  },
+  "chicken-singada": {
+    "w": 1600,
+    "h": 1200
+  },
+  "chicken-thali-normal": {
+    "w": 705,
+    "h": 600
+  },
+  "desi-chicken-baus-poda": {
+    "w": 1387,
+    "h": 900
+  },
+  "desi-chicken-biryani": {
+    "w": 1920,
+    "h": 2147
+  },
+  "desi-chicken-patra-poda": {
+    "w": 1920,
+    "h": 2560
+  },
+  "desi-chicken-pulao": {
+    "w": 1920,
+    "h": 1440
+  },
+  "desi-chicken-thali": {
+    "w": 1920,
+    "h": 1631
+  },
+  "egg-thali": {
+    "w": 1920,
+    "h": 1440
+  },
+  "fresh-coconut-water": {
+    "w": 738,
+    "h": 414
+  },
+  "handi-chicken": {
+    "w": 1000,
+    "h": 667
+  },
+  "handi-desi-chicken": {
+    "w": 1920,
+    "h": 1280
+  },
+  "handi-mutton": {
+    "w": 1600,
+    "h": 1200
+  },
+  "hot-water": {
+    "w": 452,
+    "h": 678
+  },
+  "machha-thali-fish-thali": {
+    "w": 1920,
+    "h": 2560
+  },
+  "mushroom-biryani": {
+    "w": 1920,
+    "h": 1440
+  },
+  "mushroom-patra-poda-paneer-patra-poda": {
+    "w": 1516,
+    "h": 853
+  },
+  "mushroom-singada": {
+    "w": 1920,
+    "h": 1440
+  },
+  "mutton-baus-poda": {
+    "w": 1920,
+    "h": 1275
+  },
+  "mutton-biryani": {
+    "w": 612,
+    "h": 612
+  },
+  "mutton-keema-singada": {
+    "w": 1920,
+    "h": 1440
+  },
+  "mutton-patra-poda": {
+    "w": 1920,
+    "h": 1275
+  },
+  "mutton-pulao": {
+    "w": 1920,
+    "h": 1920
+  },
+  "mutton-thali": {
+    "w": 960,
+    "h": 959
+  },
+  "packaged-drinking-water": {
+    "w": 554,
+    "h": 554
+  },
+  "pahala-rasgulla": {
+    "w": 1500,
+    "h": 738
+  },
+  "paneer-biryani": {
+    "w": 1920,
+    "h": 1440
+  },
+  "paneer-pulao": {
+    "w": 1000,
+    "h": 633
+  },
+  "paneer-singada": {
+    "w": 1920,
+    "h": 1280
+  },
+  "prawn-biryani": {
+    "w": 1920,
+    "h": 1275
+  },
+  "tofu-patra-poda": {
+    "w": 1920,
+    "h": 1440
+  },
+  "tofu-singada-vegan": {
+    "w": 868,
+    "h": 800
+  },
+  "veg-thali": {
+    "w": 997,
+    "h": 1551
+  },
+  "vegan-biryani": {
+    "w": 1920,
+    "h": 2560
+  },
+  "vegan-pulao": {
+    "w": 1920,
+    "h": 1440
+  },
+  "vegan-thali": {
+    "w": 928,
+    "h": 1391
+  }
+}
